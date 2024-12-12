@@ -14,10 +14,10 @@ enum TaskType {
 
 model Schedule {
   id    String   @id @default(uuid())
-  account_id Int
-  agent_id  Int
-  start_time DateTime
-  end_time DateTime
+  account_id Int?
+  agent_id  Int?
+  start_time DateTime?
+  end_time DateTime?
   tasks Task[]
 
   created_at DateTime @default(now())
@@ -26,11 +26,11 @@ model Schedule {
 
 model Task {
   id    String   @id @default(uuid())
-  account_id     Int
+  account_id     Int?
   schedule_id   String
   schedule Schedule @relation(fields: [schedule_id], references: [id])
-  start_time  DateTime
-  duration  DateTime 
+  start_time  DateTime?
+  duration  DateTime?
   type TaskType
 
   created_at DateTime @default(now())

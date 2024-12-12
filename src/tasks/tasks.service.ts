@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { Task, Prisma } from '@prisma/client';
 
 @Injectable()
@@ -27,26 +27,20 @@ export class TasksService {
     });
   }
 
-  async findOne(
-    taskWhereUniqueInput: Prisma.TaskWhereUniqueInput,
-  ): Promise<Task | null> {
+  async findOne(id: string): Promise<Task | null> {
     return this.prisma.task.findUnique({
-      where: taskWhereUniqueInput,
+      where: { id },
     });
   }
 
-  async update(params: {
-    where: Prisma.TaskWhereUniqueInput;
-    data: Prisma.TaskUpdateInput;
-  }): Promise<Task> {
-    const { where, data } = params;
+  async update(id: string, data: Prisma.TaskUpdateInput): Promise<Task> {
     return this.prisma.task.update({
       data,
-      where,
+      where: { id },
     });
   }
 
-  async remove(where: Prisma.TaskWhereUniqueInput): Promise<Task> {
-    return this.prisma.task.delete({ where });
+  async remove(id: string): Promise<Task> {
+    return this.prisma.task.delete({ where: { id } });
   }
 }

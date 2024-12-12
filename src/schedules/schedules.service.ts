@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { Schedule, Prisma } from '@prisma/client';
-//import { CreateScheduleDto } from './dto/create-schedule.dto';
-//import { UpdateScheduleDto } from './dto/update-schedule.dto';
 
 @Injectable()
 export class SchedulesService {
@@ -29,26 +27,25 @@ export class SchedulesService {
     });
   }
 
-  async findOne(
-    scheduleWhereUniqueInput: Prisma.ScheduleWhereUniqueInput,
-  ): Promise<Schedule | null> {
+  async findOne(id: string): Promise<Schedule | null> {
     return this.prisma.schedule.findUnique({
-      where: scheduleWhereUniqueInput,
+      where: {
+        id,
+      },
     });
   }
 
-  async update(params: {
-    where: Prisma.ScheduleWhereUniqueInput;
-    data: Prisma.ScheduleUpdateInput;
-  }): Promise<Schedule> {
-    const { where, data } = params;
+  async update(
+    id: string,
+    data: Prisma.ScheduleUpdateInput,
+  ): Promise<Schedule> {
     return this.prisma.schedule.update({
       data,
-      where,
+      where: { id },
     });
   }
 
-  async remove(where: Prisma.ScheduleWhereUniqueInput): Promise<Schedule> {
-    return this.prisma.schedule.delete({ where });
+  async remove(id: string): Promise<Schedule> {
+    return this.prisma.schedule.delete({ where: { id } });
   }
 }

@@ -1,0 +1,10 @@
+-- AlterTable
+ALTER TABLE "Schedule" ALTER COLUMN "account_id" DROP NOT NULL,
+ALTER COLUMN "agent_id" DROP NOT NULL,
+ALTER COLUMN "start_time" DROP NOT NULL,
+ALTER COLUMN "end_time" DROP NOT NULL;
+
+-- AlterTable
+ALTER TABLE "Task" ALTER COLUMN "account_id" DROP NOT NULL,
+ALTER COLUMN "start_time" DROP NOT NULL,
+ALTER COLUMN "duration" DROP NOT NULL;
