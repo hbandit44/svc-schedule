@@ -56,26 +56,36 @@ describe('SchedulesController', () => {
     expect(controller).toBeDefined();
   });
 
-  it.only('should HTTP GET a list of schedules', async () => {
-    (mockedScheduleService.findAll as jest.Mock).mockResolvedValue(
-      scheduleFixtures,
-    );
-    return request(app.getHttpServer())
-      .get('/schedules')
-      .expect(400)
-      .expect(scheduleFixtures);
-  });
-
-  it.only('should HTTP GET a list of schedules with query params', async () => {
+  it('should HTTP GET a list of schedules', async () => {
     (mockedScheduleService.findAll as jest.Mock).mockResolvedValue(
       scheduleFixtures,
     );
     await request(app.getHttpServer())
-      .get('/schedules?skip=1&take=2&agent_id=1')
+      .get('/schedules')
       .expect(200)
       .expect(scheduleFixtures);
-    expect(mockedScheduleService.findAll).toHaveBeenCalledWith(3, 2, {
-      agent_id: 1,
+    expect(mockedScheduleService.findAll).toHaveBeenCalledWith({
+      skip: 0,
+      take: 10,
+      where: {}
+    });
+  });
+
+  it('should HTTP GET a list of schedules with query params', async () => {
+    (mockedScheduleService.findAll as jest.Mock).mockResolvedValue(
+      scheduleFixtures,
+    );
+    await request(app.getHttpServer())
+      .get('/schedules?skip=1&take=2&agent_id=1&account_id=1')
+      .expect(200)
+      .expect(scheduleFixtures);
+    expect(mockedScheduleService.findAll).toHaveBeenCalledWith({
+      skip: 1,
+      take: 2,
+      where: {
+        agent_id: 1,
+        account_id: 1,
+      }
     });
   });
 

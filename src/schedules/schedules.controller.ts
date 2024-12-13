@@ -9,6 +9,7 @@ import {
   Delete,
   ParseUUIDPipe,
   ParseIntPipe,
+  DefaultValuePipe,
   UsePipes,
 } from '@nestjs/common';
 import { SchedulesService } from './schedules.service';
@@ -34,12 +35,22 @@ export class SchedulesController {
 
   @Get()
   findAll(
-    @Query('skip', ParseIntPipe) skip: number = 0,
-    @Query('take', ParseIntPipe) take: number = 10,
+    @Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
+    @Query('take', new DefaultValuePipe(10), ParseIntPipe) take: number,
+    @Query('agent_id', new DefaultValuePipe(0), ParseIntPipe) agent_id: number,
+    @Query('account_id', new DefaultValuePipe(0), ParseIntPipe) account_id: number,
   ) {
+    const where: Record<string, number> = {};
+    if(agent_id && agent_id != 0) {
+      where.agent_id = agent_id
+    }
+    if(account_id && account_id !=0) {
+      where.account_id = account_id
+    }
     const params = {
       skip,
       take,
+      where,
     };
     return this.schedulesService.findAll(params);
   }
