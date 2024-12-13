@@ -67,7 +67,7 @@ describe('SchedulesController', () => {
     expect(mockedScheduleService.findAll).toHaveBeenCalledWith({
       skip: 0,
       take: 10,
-      where: {}
+      where: {},
     });
   });
 
@@ -85,11 +85,11 @@ describe('SchedulesController', () => {
       where: {
         agent_id: 1,
         account_id: 1,
-      }
+      },
     });
   });
 
-  it('HTTP GET /schedules/:id id needs to be a UUID', async () => {
+  it('HTTP GET /schedules/:id 400 id needs to be a UUID', async () => {
     return request(app.getHttpServer()).get('/schedules/1').expect(400).expect({
       message: 'Validation failed (uuid is expected)',
       error: 'Bad Request',
@@ -134,9 +134,9 @@ describe('SchedulesController', () => {
       .send(newSchedule)
       .expect(400)
       .expect({
-        "message":"Validation failed (uuid is expected)",
-        "error":"Bad Request",
-        "statusCode":400
+        message: 'Validation failed (uuid is expected)',
+        error: 'Bad Request',
+        statusCode: 400,
       });
   });
 
@@ -167,16 +167,13 @@ describe('SchedulesController', () => {
   });
 
   it('HTTP DELETE /schedules/:id 400 id param needs to be a UUID ', async () => {
-    return request(app.getHttpServer())
-      .delete('/schedules/8')
-      .expect(400)
+    return request(app.getHttpServer()).delete('/schedules/8').expect(400);
   });
 
   it('HTTP DELETE /schedules/:id 200 id param needs to be a UUID ', async () => {
     (mockedScheduleService.remove as jest.Mock).mockResolvedValue(newSchedule);
     return request(app.getHttpServer())
       .delete('/schedules/80ba9b34-4640-4427-ae59-e910e3f7191e')
-      .expect(200)
+      .expect(200);
   });
-
 });

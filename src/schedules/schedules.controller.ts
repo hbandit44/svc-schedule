@@ -38,14 +38,15 @@ export class SchedulesController {
     @Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
     @Query('take', new DefaultValuePipe(10), ParseIntPipe) take: number,
     @Query('agent_id', new DefaultValuePipe(0), ParseIntPipe) agent_id: number,
-    @Query('account_id', new DefaultValuePipe(0), ParseIntPipe) account_id: number,
+    @Query('account_id', new DefaultValuePipe(0), ParseIntPipe)
+    account_id: number,
   ) {
     const where: Record<string, number> = {};
-    if(agent_id && agent_id != 0) {
-      where.agent_id = agent_id
+    if (agent_id && agent_id != 0) {
+      where.agent_id = agent_id;
     }
-    if(account_id && account_id !=0) {
-      where.account_id = account_id
+    if (account_id && account_id != 0) {
+      where.account_id = account_id;
     }
     const params = {
       skip,
@@ -63,7 +64,8 @@ export class SchedulesController {
   @Patch(':id')
   update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body(new ZodValidationPipe(UpdateScheduleSchema)) updateScheduleDto: UpdateScheduleDto,
+    @Body(new ZodValidationPipe(UpdateScheduleSchema))
+    updateScheduleDto: UpdateScheduleDto,
   ) {
     return this.schedulesService.update(id, updateScheduleDto);
   }
