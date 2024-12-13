@@ -3,10 +3,12 @@ import {
   Get,
   Post,
   Body,
+  Query,
   Patch,
   Param,
   Delete,
   ParseUUIDPipe,
+  ParseIntPipe,
   UsePipes,
 } from '@nestjs/common';
 import { SchedulesService } from './schedules.service';
@@ -31,8 +33,14 @@ export class SchedulesController {
   }
 
   @Get()
-  findAll() {
-    const params = {};
+  findAll(
+    @Query('skip', ParseIntPipe) skip: number = 0,
+    @Query('take', ParseIntPipe) take: number = 10,
+  ) {
+    const params = {
+      skip,
+      take,
+    };
     return this.schedulesService.findAll(params);
   }
 
@@ -42,17 +50,15 @@ export class SchedulesController {
   }
 
   @Patch(':id')
-  @UsePipes(new ZodValidationPipe(UpdateScheduleSchema))
   update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() updateScheduleDto: UpdateScheduleDto,
+    @Body(new ZodValidationPipe(UpdateScheduleSchema)) updateScheduleDto: UpdateScheduleDto,
   ) {
     return this.schedulesService.update(id, updateScheduleDto);
   }
 
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
-    return 'this and that';
     return this.schedulesService.remove(id);
   }
 }

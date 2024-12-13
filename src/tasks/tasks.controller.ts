@@ -38,7 +38,10 @@ export class TasksController {
 
   @Patch(':id')
   @UsePipes(new ZodValidationPipe(updateTaskSchema))
-  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateTaskDto: UpdateTaskDto) {
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateTaskDto: UpdateTaskDto,
+  ) {
     return this.tasksService.update(id, updateTaskDto);
   }
 
