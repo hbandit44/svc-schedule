@@ -56,7 +56,7 @@ describe('SchedulesController', () => {
     expect(controller).toBeDefined();
   });
 
-  it('should HTTP GET a list of schedules', async () => {
+  it('HTTP GET /schedules 200 should return list of schedules', async () => {
     (mockedScheduleService.findAll as jest.Mock).mockResolvedValue(
       scheduleFixtures,
     );
@@ -71,7 +71,7 @@ describe('SchedulesController', () => {
     });
   });
 
-  it('should HTTP GET a list of schedules with query params', async () => {
+  it('HTTP GET /schedules 200 should return a list of schedules with query params', async () => {
     (mockedScheduleService.findAll as jest.Mock).mockResolvedValue(
       scheduleFixtures,
     );
