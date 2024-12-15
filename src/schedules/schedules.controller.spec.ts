@@ -97,6 +97,18 @@ describe('SchedulesController', () => {
     });
   });
 
+  it('HTTP GET /schedules/:id 404 schedule not found', async () => {
+    (mockedScheduleService.findOne as jest.Mock).mockResolvedValue(null);
+    return request(app.getHttpServer())
+      .get('/schedules/80ba9b34-4640-4427-ae59-e910e3f7191e')
+      .expect(404)
+      .expect({
+        message: 'schedule not found',
+        error: 'Not Found',
+        statusCode: 404,
+      });
+  });
+
   it('HTTP GET /schedules/:id 200 returns a schedule', async () => {
     (mockedScheduleService.findOne as jest.Mock).mockResolvedValue(
       scheduleFixtures[0],
@@ -157,6 +169,14 @@ describe('SchedulesController', () => {
       });
   });
 
+  it('HTTP PATCH /schedules 404 schedule not found', async () => {
+    (mockedScheduleService.update as jest.Mock).mockResolvedValue(null);
+    return request(app.getHttpServer())
+      .patch('/schedules/80ba9b34-4640-4427-ae59-e910e3f7191e')
+      .send(newSchedule)
+      .expect(404);
+  });
+
   it('HTTP PATCH /schedules 200 update schedule', async () => {
     (mockedScheduleService.update as jest.Mock).mockResolvedValue(newSchedule);
     return request(app.getHttpServer())
@@ -170,7 +190,14 @@ describe('SchedulesController', () => {
     return request(app.getHttpServer()).delete('/schedules/8').expect(400);
   });
 
-  it('HTTP DELETE /schedules/:id 200 id param needs to be a UUID ', async () => {
+  it('HTTP DELETE /schedules/:id 404 schedule not found ', async () => {
+    (mockedScheduleService.remove as jest.Mock).mockResolvedValue(null);
+    return request(app.getHttpServer())
+      .delete('/schedules/80ba9b34-4640-4427-ae59-e910e3f7191e')
+      .expect(404);
+  });
+
+  it('HTTP DELETE /schedules/:id 200 deletes schedule', async () => {
     (mockedScheduleService.remove as jest.Mock).mockResolvedValue(newSchedule);
     return request(app.getHttpServer())
       .delete('/schedules/80ba9b34-4640-4427-ae59-e910e3f7191e')

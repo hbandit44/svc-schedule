@@ -10,20 +10,16 @@ export class SchedulesService {
     return this.prisma.schedule.create({ data });
   }
 
-  findAll(params: {
+  async findAll(params: {
     skip?: number;
     take?: number;
-    cursor?: Prisma.ScheduleWhereUniqueInput;
     where?: Prisma.ScheduleWhereInput;
-    orderBy?: Prisma.ScheduleOrderByWithRelationInput;
   }): Promise<Schedule[]> {
-    const { skip, take, cursor, where, orderBy } = params;
+    const { skip, take, where } = params;
     return this.prisma.schedule.findMany({
       skip,
       take,
-      cursor,
       where,
-      orderBy,
     });
   }
 

@@ -10,12 +10,13 @@ import {
   ParseUUIDPipe,
   ParseIntPipe,
   DefaultValuePipe,
+  NotFoundException,
   UsePipes,
 } from '@nestjs/common';
 import { SchedulesService } from './schedules.service';
 import {
   CreateScheduleDto,
-  createScheduleSchema,
+  CreateScheduleSchema,
 } from './dto/create-schedule.dto';
 import {
   UpdateScheduleDto,
@@ -28,13 +29,13 @@ export class SchedulesController {
   constructor(private readonly schedulesService: SchedulesService) {}
 
   @Post()
-  @UsePipes(new ZodValidationPipe(createScheduleSchema))
-  create(@Body() createScheduleDto: CreateScheduleDto) {
+  @UsePipes(new ZodValidationPipe(CreateScheduleSchema))
+  async create(@Body() createScheduleDto: CreateScheduleDto) {
     return this.schedulesService.create(createScheduleDto);
   }
 
   @Get()
-  findAll(
+  async findAll(
     @Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
     @Query('take', new DefaultValuePipe(10), ParseIntPipe) take: number,
     @Query('agent_id', new DefaultValuePipe(0), ParseIntPipe) agent_id: number,
@@ -57,21 +58,33 @@ export class SchedulesController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.schedulesService.findOne(id);
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+    const schedule = await this.schedulesService.findOne(id);
+    if (!schedule) {
+      throw new NotFoundException('schedule not found');
+    }
+    return schedule;
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body(new ZodValidationPipe(UpdateScheduleSchema))
     updateScheduleDto: UpdateScheduleDto,
   ) {
-    return this.schedulesService.update(id, updateScheduleDto);
+    const schedule = await this.schedulesService.update(id, updateScheduleDto);
+    if (!schedule) {
+      throw new NotFoundException('schedule not found');
+    }
+    return schedule;
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.schedulesService.remove(id);
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
+    const schedule = await this.schedulesService.remove(id);
+    if (!schedule) {
+      throw new NotFoundException('schedule not found');
+    }
+    return schedule;
   }
 }

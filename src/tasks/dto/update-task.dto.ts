@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const updateTaskSchema = z.object({
+export const UpdateTaskSchema = z.object({
   agent_id: z.number().optional().nullable(),
   start_time: z.string().datetime().optional().nullable(),
   end_time: z.string().datetime().optional().nullable(),
