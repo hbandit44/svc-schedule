@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Task, TaskWithDuration, Prisma } from '@prisma/client';
+import { Task, TaskWithDuration, Prisma, Schedule } from '@prisma/client';
 
 @Injectable()
 export class TasksService {
@@ -10,14 +10,19 @@ export class TasksService {
     return this.prisma.task.create(data);
   }
 
+  async _createWithSchedule(
+    data: Prisma.ScheduleCreateArgs,
+  ): Promise<Schedule> {
+    return this.prisma.schedule.create(data);
+  }
+
   async findAll(params: {
     skip?: number;
     take?: number;
-    where?: Prisma.TaskWithDurationWhereInput;
-  }): Promise<TaskWithDuration[]> {
+    where?: Prisma.TaskWhereInput;
+  }): Promise<Task[]> {
     const { skip, take, where } = params;
-
-    return this.prisma.taskWithDuration.findMany({
+    return this.prisma.task.findMany({
       skip,
       take,
       where,
@@ -28,12 +33,24 @@ export class TasksService {
     schedule_id: string,
     id: string,
   ): Promise<TaskWithDuration | null> {
-    return this.prisma.taskWithDuration.findUnique({
-      where: {
-        schedule_id,
+    const tasks: TaskWithDuration[] = await this.prisma.$queryRaw`
+      select
         id,
-      },
-    });
+        schedule_id,
+        start_time,
+        end_time,
+        (end_time - start_time)::text as duration,
+        type
+      FROM "Task"
+      WHERE
+        schedule_id = ${schedule_id}
+        AND id = ${id}
+    `;
+    if (tasks.length === 0) {
+      return null;
+    } else {
+      return tasks[0];
+    }
   }
 
   async update(

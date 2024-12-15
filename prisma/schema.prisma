@@ -44,7 +44,7 @@ view TaskWithDuration {
   schedule_id   String
   start_time  DateTime?
   end_time  DateTime?
-  duration  String   @db.Text // Map the INTERVAL as a string
+  duration  String   @db.Interval // Map the INTERVAL as a string
   type TaskType
 
   created_at DateTime @default(now())

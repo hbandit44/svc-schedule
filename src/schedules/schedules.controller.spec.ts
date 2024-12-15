@@ -18,10 +18,12 @@ describe('SchedulesController', () => {
   const scheduleFixtures = [
     {
       id: 1,
+      account_id: 1,
       agent_id: 1,
     },
     {
       id: 2,
+      account_id: 2,
       agent_id: 2,
     },
   ];

@@ -1,5 +1,6 @@
 import { z } from 'zod';
-enum TaskType {
+
+export enum TaskType {
   break = 'break',
   work = 'work',
 }
