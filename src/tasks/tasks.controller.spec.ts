@@ -142,7 +142,7 @@ describe('TasksController', () => {
     return request(app.getHttpServer())
       .patch('/schedules/80ba9b34-4640-4427-ae59-e910e3f7191e/tasks/1')
       .send({
-        end_time: '2024-12-15T10:30:00Z',
+        start_time: '2025-12-15T10:30:00Z',
       })
       .expect({
         message: 'Validation failed (uuid is expected)',
@@ -158,7 +158,7 @@ describe('TasksController', () => {
         '/schedules/80ba9b34-4640-4427-ae59-e910e3f7191e/tasks/69dfc017-2a9e-4ced-acd1-b961916e28b3',
       )
       .send({
-        end_time: '2024-12-15T10:30:00Z',
+        start_time: '2025-12-15T10:30:00Z',
       })
       .expect(404);
   });
@@ -170,6 +170,7 @@ describe('TasksController', () => {
         '/schedules/80ba9b34-4640-4427-ae59-e910e3f7191e/tasks/69dfc017-2a9e-4ced-acd1-b961916e28b3',
       )
       .send({
+        start_time: '2025-12-15T10:30:00Z',
         end_time: '2024-12-15T10:30:00Z',
       })
       .expect(200)

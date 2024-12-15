@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Task, Prisma } from '@prisma/client';
-import { CreateTaskDto } from './dto/create-task.dto';
+import { Task, TaskWithDuration, Prisma } from '@prisma/client';
 
 @Injectable()
 export class TasksService {
@@ -14,18 +13,22 @@ export class TasksService {
   async findAll(params: {
     skip?: number;
     take?: number;
-    where?: Prisma.TaskWhereInput;
-  }): Promise<Task[]> {
+    where?: Prisma.TaskWithDurationWhereInput;
+  }): Promise<TaskWithDuration[]> {
     const { skip, take, where } = params;
-    return this.prisma.task.findMany({
+
+    return this.prisma.taskWithDuration.findMany({
       skip,
       take,
       where,
     });
   }
 
-  async findOne(schedule_id: string, id: string): Promise<Task | null> {
-    return this.prisma.task.findUnique({
+  async findOne(
+    schedule_id: string,
+    id: string,
+  ): Promise<TaskWithDuration | null> {
+    return this.prisma.taskWithDuration.findUnique({
       where: {
         schedule_id,
         id,
