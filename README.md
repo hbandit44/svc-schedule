@@ -32,9 +32,6 @@ $ yarn run start:prod
 # unit tests
 $ yarn run test
 
-# e2e tests
-$ yarn run test:e2e
-
 # test coverage
 $ yarn run test:cov
 ```
@@ -56,3 +53,4 @@ $ mau deploy
 3. Better loading and deleting of fixtures into DB for test.
 4. Alter schedule queries so all return calculated **duration** field
 5. Confirm all libs required in package.json
+6. Return count on /schedule requests to prevent un needed requests to /task endpoint
