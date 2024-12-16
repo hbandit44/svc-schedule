@@ -69,18 +69,33 @@ describe('TasksController', () => {
 
   it('HTTP GET /schedules/:id/tasks 200 should return a list of tasks', async () => {
     (mockedTaskService.findAll as jest.Mock).mockResolvedValue(tasksFixtures);
-    return request(app.getHttpServer())
+    await request(app.getHttpServer())
       .get('/schedules/80ba9b34-4640-4427-ae59-e910e3f7191e/tasks')
       .expect(200)
       .expect(tasksFixtures);
+    expect(mockedTaskService.findAll).toHaveBeenCalledWith({
+      skip: 0,
+      take: 10,
+      where: {
+        schedule_id: '80ba9b34-4640-4427-ae59-e910e3f7191e',
+      },
+    });
   });
 
   it('HTTP GET /schedules/:id/tasks 200 should take optional query params', async () => {
     (mockedTaskService.findAll as jest.Mock).mockResolvedValue(tasksFixtures);
-    return request(app.getHttpServer())
+    await request(app.getHttpServer())
       .get('/schedules/80ba9b34-4640-4427-ae59-e910e3f7191e/tasks?account_id=1')
       .expect(200)
       .expect(tasksFixtures);
+    expect(mockedTaskService.findAll).toHaveBeenCalledWith({
+      skip: 0,
+      take: 10,
+      where: {
+        account_id: 1,
+        schedule_id: '80ba9b34-4640-4427-ae59-e910e3f7191e',
+      },
+    });
   });
 
   it('HTTP GET /schedules/:id/tasks/:id 400 should error UUID required', async () => {

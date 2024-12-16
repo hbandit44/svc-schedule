@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Task, TaskWithDuration, Prisma, Schedule } from '@prisma/client';
+import { Task, Prisma, Schedule } from '@prisma/client';
+
+type TaskWithDuration = Task &  {
+  duration: string;
+};
 
 @Injectable()
 export class TasksService {

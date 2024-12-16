@@ -37,16 +37,3 @@ model Task {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }
-
-view TaskWithDuration {
-  id    String   @id @default(uuid())  @unique
-  account_id     Int?
-  schedule_id   String
-  start_time  DateTime?
-  end_time  DateTime?
-  duration  String   @db.Interval // Map the INTERVAL as a string
-  type TaskType
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-}
